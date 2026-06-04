@@ -1,0 +1,45 @@
+import random
+n = 5
+room = [
+    [0, 1, 0, 1, 0],
+    [1, 0, 1, 0, 1],
+    [0, 0, 1, 0, 0],
+    [1, 0, 0, 1, 0],
+    [0, 1, 0, 0, 1]
+]
+x = 0
+y = 0
+def possible_moves(x, y):
+    moves = []
+    if x > 0:
+        moves.append("UP")
+    if x < n - 1:
+        moves.append("DOWN")
+    if y > 0:
+        moves.append("LEFT")
+    if y < n - 1:
+        moves.append("RIGHT")
+    return moves
+def move_robot(action, x, y):
+    if action == "UP":
+        x -= 1
+    elif action == "DOWN":
+        x += 1
+    elif action == "LEFT":
+        y -= 1
+    elif action == "RIGHT":
+        y += 1
+    return x, y
+for step in range(20):
+    print("\nRobot position:", (x, y))
+    # Rule 1: If dirty -> clean
+    if room[x][y] == 1:
+        print("Suck dust")
+        room[x][y] = 0
+    # Rule 2: Random movement
+    moves = possible_moves(x, y)
+    action = random.choice(moves)
+    print("Action:", action)
+    x, y = move_robot(action, x, y)
+    for row in room:
+        print(row)

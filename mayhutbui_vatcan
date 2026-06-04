@@ -1,0 +1,77 @@
+import random
+
+n = 5
+# 0: sạch, 1: bẩn, 2: vật cản (#)
+room = [
+    [0, 1, 0, 2, 0],
+    [1, 0, 1, 0, 1],
+    [0, 2, 1, 0, 0],
+    [1, 0, 0, 2, 0],
+    [0, 1, 0, 0, 1]
+]
+
+# Vị trí bắt đầu của robot (phải là ô trống, không phải vật cản)
+x, y = 0, 0
+
+def possible_moves(x, y):
+    moves = []
+    if x > 0 and room[x-1][y] != 2:
+        moves.append("UP")
+    if x < n - 1 and room[x+1][y] != 2:
+        moves.append("DOWN")
+    if y > 0 and room[x][y-1] != 2:
+        moves.append("LEFT")
+    if y < n - 1 and room[x][y+1] != 2:
+        moves.append("RIGHT")
+    return moves
+
+def move_robot(action, x, y):
+    if action == "UP":
+        x -= 1
+    elif action == "DOWN":
+        x += 1
+    elif action == "LEFT":
+        y -= 1
+    elif action == "RIGHT":
+        y += 1
+    return x, y
+
+# Hàm hiển thị phòng (dùng ký tự trực quan)
+def display_room(room, robot_x, robot_y):
+    for i in range(n):
+        row = ""
+        for j in range(n):
+            if i == robot_x and j == robot_y:
+                row += "V "   # Robot
+            else:
+                if room[i][j] == 2:
+                    row += "# "   # Vật cản
+                elif room[i][j] == 1:
+                    row += "D "   # Bụi (Dirty)
+                else:
+                    row += ". "   # Sạch
+        print(row)
+    print()
+
+for step in range(20):
+    print(f"Bước {step+1}: Robot ở ({x}, {y})")
+    display_room(room, x, y)
+
+    # Luật 1: Nếu ô hiện tại có bụi -> hút sạch
+    if room[x][y] == 1:
+        print(">>> Hút bụi!")
+        room[x][y] = 0
+
+    # Lấy các nước đi hợp lệ (tránh tường và vật cản)
+    moves = possible_moves(x, y)
+    if not moves:
+        print("Không thể di chuyển, robot bị kẹt!")
+        break
+
+    # Luật 2: Di chuyển ngẫu nhiên
+    action = random.choice(moves)
+    print(f"Hành động: {action}")
+    x, y = move_robot(action, x, y)
+
+print("\nKết thúc. Trạng thái phòng cuối cùng:")
+display_room(room, x, y)

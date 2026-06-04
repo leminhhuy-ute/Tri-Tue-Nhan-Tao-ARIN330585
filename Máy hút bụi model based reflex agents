@@ -1,0 +1,139 @@
+import random
+
+# 0  = sạch
+# 1  = bẩn
+# -1 = vật cản
+
+environment = [
+    [1, 0, 1, -1],
+    [0, -1, 1, 0],
+    [1, 0, 0, 1],
+    [0, 1, -1, 0]
+]
+
+ROWS = len(environment)
+COLS = len(environment[0])
+
+# Vị trí ban đầu của máy hút bụi
+agent_row = 0
+agent_col = 0
+
+# Các hướng di chuyển
+directions = ["UP", "RIGHT", "DOWN", "LEFT"]
+
+# Hướng ban đầu
+current_direction = "RIGHT"
+
+
+def print_environment():
+    for i in range(ROWS):
+        for j in range(COLS):
+            if i == agent_row and j == agent_col:
+                print("A", end=" ")
+            else:
+                print(environment[i][j], end=" ")
+        print()
+    print("-" * 30)
+
+
+def is_valid_position(row, col):
+    """
+    Kiểm tra vị trí có nằm trong ma trận
+    và không phải vật cản hay không.
+    """
+    if row < 0 or row >= ROWS:
+        return False
+
+    if col < 0 or col >= COLS:
+        return False
+
+    if environment[row][col] == -1:
+        return False
+
+    return True
+
+
+def next_position(row, col, direction):
+    """
+    Trả về vị trí tiếp theo theo hướng đang đi.
+    """
+    if direction == "UP":
+        return row - 1, col
+
+    if direction == "DOWN":
+        return row + 1, col
+
+    if direction == "LEFT":
+        return row, col - 1
+
+    if direction == "RIGHT":
+        return row, col + 1
+
+
+def turn_right(direction):
+    """
+    Rule: gặp vật cản hoặc biên thì rẽ phải.
+    """
+    index = directions.index(direction)
+    return directions[(index + 1) % 4]
+
+
+def is_all_clean():
+    """
+    Kiểm tra còn ô bẩn nào trong ma trận không.
+    """
+    for row in environment:
+        for cell in row:
+            if cell == 1:
+                return False
+    return True
+
+
+step = 1
+
+while True:
+    print(f"Bước {step}")
+    print(f"Vị trí hiện tại: ({agent_row}, {agent_col})")
+    print(f"Hướng hiện tại: {current_direction}")
+
+    current_cell = environment[agent_row][agent_col]
+
+    # Rule 1: Nếu ô hiện tại bẩn thì hút
+    if current_cell == 1:
+        print("Ô hiện tại bẩn -> Hút bụi")
+        environment[agent_row][agent_col] = 0
+
+    # Rule 2: Nếu ô hiện tại sạch thì di chuyển
+    else:
+        print("Ô hiện tại sạch -> Di chuyển")
+
+        next_row, next_col = next_position(
+            agent_row,
+            agent_col,
+            current_direction
+        )
+
+        # Rule 3: Nếu phía trước hợp lệ thì đi tiếp
+        if is_valid_position(next_row, next_col):
+            agent_row = next_row
+            agent_col = next_col
+            print("Phía trước đi được -> Đi tiếp")
+
+        # Rule 4: Nếu gặp vật cản hoặc biên thì rẽ phải
+        else:
+            print("Gặp vật cản hoặc biên -> Rẽ phải")
+            current_direction = turn_right(current_direction)
+
+    print_environment()
+
+    # Rule 5: Nếu tất cả ô đã sạch thì dừng
+    if is_all_clean():
+        print("Tất cả ô bẩn đã được hút. Máy hút bụi dừng lại.")
+        break
+
+    step += 1
+
+    # Chống vòng lặp vô hạn
+    if step > 100:
+        print("Dừng vì quá số bước cho phép.")
+        break

@@ -1,0 +1,131 @@
+# RULE 1:
+# IF ô trống không ở hàng trên cùng
+# THEN được phép đi UP
+# RULE 2:
+# IF ô trống không ở hàng dưới cùng
+# THEN được phép đi DOWN
+# RULE 3:
+# IF ô trống không ở cột bên trái
+# THEN được phép đi LEFT
+# RULE 4:
+# IF ô trống không ở cột bên phải
+# THEN được phép đi RIGHT
+
+import random
+GOAL = [1, 2, 3,
+        4, 5, 6,
+        7, 8, 0]   # 0 là ô trống
+def print_board(state):
+    for i in range(0, 9, 3):
+        print(state[i:i+3])
+    print()
+def is_goal(state):
+    return state == GOAL
+# Tìm vị trí ô trống
+def get_blank(state):
+    return state.index(0)
+# Các nước đi hợp lệ
+def legal_moves(state):
+    pos = get_blank(state)
+    moves = []
+    if pos not in [0, 1, 2]:
+        moves.append("up")
+    if pos not in [6, 7, 8]:
+        moves.append("down")
+    if pos not in [0, 3, 6]:
+        moves.append("left")
+    if pos not in [2, 5, 8]:
+        moves.append("right")
+
+    return moves
+# Thực hiện di chuyển
+def move(state, action):
+    new_state = state[:]
+    pos = get_blank(new_state)
+
+    if action == "up":
+        swap = pos - 3
+
+    elif action == "down":
+        swap = pos + 3
+
+    elif action == "left":
+        swap = pos - 1
+
+    elif action == "right":
+        swap = pos + 1
+
+    # đổi chỗ
+    new_state[pos], new_state[swap] = new_state[swap], new_state[pos]
+
+    return new_state
+
+
+# Heuristic Manhattan Distance
+def heuristic(state):
+    distance = 0
+
+    for i in range(9):
+        tile = state[i]
+
+        if tile != 0:
+            goal_pos = tile - 1
+
+            x1, y1 = divmod(i, 3)
+            x2, y2 = divmod(goal_pos, 3)
+
+            distance += abs(x1 - x2) + abs(y1 - y2)
+
+    return distance
+class Agent:
+
+    def choose_action(self, state):
+
+        best_action = None
+        best_score = 999
+
+        # thử tất cả nước đi
+        for action in legal_moves(state):
+
+            next_state = move(state, action)
+
+            score = heuristic(next_state)
+
+            # chọn trạng thái tốt nhất
+            if score < best_score:
+                best_score = score
+                best_action = action
+
+        return best_action
+
+
+# =========================
+# Tạo trạng thái ngẫu nhiên
+# =========================
+state = GOAL[:]
+
+for _ in range(20):
+    action = random.choice(legal_moves(state))
+    state = move(state, action)
+agent = Agent()
+
+step = 0
+
+print("Initial State:")
+print_board(state)
+
+while not is_goal(state) and step < 50:
+
+    action = agent.choose_action(state)
+
+    state = move(state, action)
+
+    step += 1
+
+    print("Step", step, "-", action)
+    print_board(state)
+
+if is_goal(state):
+    print("Solved!")
+else:
+    print("Cannot solve!")
