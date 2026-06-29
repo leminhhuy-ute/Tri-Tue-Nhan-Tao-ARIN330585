@@ -47,6 +47,16 @@ ALGORITHMS = {
                 ("Local Beam Search", "local_beam_search.py"),
                 ("Simulated Annealing", "simulated_annealing.py"),
             ],
+            "Nhóm 4 - Complex Environments": [
+                ("AND-OR Search", "and_or_search.py"),
+                ("No Observation Search", "no_observation.py"),
+                ("Partially Observable Search", "partially_observable.py"),
+                ("Online Search (LRTA*)", "online_search.py"),
+            ],
+            "Nhóm 5 - Constraint Satisfaction Problems": [
+                ("CSP Backtracking", "csp_backtracking.py"),
+                ("Min-Conflicts", "min_conflicts.py"),
+            ],
         },
     },
     "8Puzzle": {
@@ -159,7 +169,7 @@ class MainApp(tk.Tk):
         tk.Label(
             header,
             text="🧠 TRÍ TUỆ NHÂN TẠO",
-            font=("Arial", 32, "bold"),
+            font=("Segoe UI", 36, "bold"),
             fg="#ffffff",
             bg="#0a0a1a",
         ).pack()
@@ -167,7 +177,7 @@ class MainApp(tk.Tk):
         tk.Label(
             header,
             text="Chọn một chế độ để khám phá các thuật toán AI",
-            font=("Arial", 14),
+            font=("Segoe UI", 14),
             fg="#636e72",
             bg="#0a0a1a",
         ).pack(pady=(5, 0))
@@ -203,51 +213,52 @@ class MainApp(tk.Tk):
 
         card = tk.Frame(
             parent,
-            bg="#141428",
+            bg="#1a1a3a",
             highlightbackground=color,
             highlightthickness=2,
             cursor="hand2",
         )
-        card.grid(row=row, column=col, padx=15, pady=15, sticky="nsew")
+        card.grid(row=row, column=col, padx=20, pady=20, sticky="nsew")
 
-        inner = tk.Frame(card, bg="#141428", padx=25, pady=20)
+        inner = tk.Frame(card, bg="#1a1a3a", padx=30, pady=25)
         inner.pack(fill="both", expand=True)
 
         # Icon
         tk.Label(
             inner,
             text=mode["icon"],
-            font=("Segoe UI Emoji", 36),
-            bg="#141428",
+            font=("Segoe UI Emoji", 42),
+            fg=color,
+            bg="#1a1a3a",
         ).pack(anchor="w")
 
         # Title
         tk.Label(
             inner,
             text=mode["title"],
-            font=("Arial", 20, "bold"),
+            font=("Segoe UI", 22, "bold"),
             fg=color,
-            bg="#141428",
-        ).pack(anchor="w", pady=(8, 2))
+            bg="#1a1a3a",
+        ).pack(anchor="w", pady=(12, 4))
 
         # Subtitle
         tk.Label(
             inner,
             text=mode["subtitle"],
-            font=("Arial", 11),
-            fg="#b2bec3",
-            bg="#141428",
+            font=("Segoe UI", 12),
+            fg="#dfe6e9",
+            bg="#1a1a3a",
         ).pack(anchor="w")
 
         # Algo count
         total = sum(len(algos) for algos in mode["groups"].values())
         tk.Label(
             inner,
-            text=f"{total} thuật toán",
-            font=("Arial", 10),
-            fg="#636e72",
-            bg="#141428",
-        ).pack(anchor="w", pady=(8, 0))
+            text=f"✦ {total} thuật toán",
+            font=("Segoe UI", 11, "italic"),
+            fg="#0984e3",
+            bg="#1a1a3a",
+        ).pack(anchor="w", pady=(15, 0))
 
         # Bind click
         def on_click(event, key=mode_key):
@@ -259,9 +270,17 @@ class MainApp(tk.Tk):
         # Hover effects
         def on_enter(event, c=card, clr=mode["hover"]):
             c.configure(highlightbackground=clr, highlightthickness=3)
+            c.configure(bg="#22224b")
+            inner.configure(bg="#22224b")
+            for w in inner.winfo_children():
+                w.configure(bg="#22224b")
 
         def on_leave(event, c=card, clr=color):
             c.configure(highlightbackground=clr, highlightthickness=2)
+            c.configure(bg="#1a1a3a")
+            inner.configure(bg="#1a1a3a")
+            for w in inner.winfo_children():
+                w.configure(bg="#1a1a3a")
 
         for widget in [card, inner] + inner.winfo_children():
             widget.bind("<Enter>", on_enter)
