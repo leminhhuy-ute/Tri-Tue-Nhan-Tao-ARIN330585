@@ -38,7 +38,7 @@ Chỉ cần mở Terminal/Command Prompt tại thư mục dự án và gõ lện
 python main_app.py
 ```
 Hoặc bạn có thể mở folder trên Visual Studio Code, click vào file python main_app và run.
-```
+
 *Giao diện Menu chính sẽ hiện ra cho phép bạn chọn và trải nghiệm bất kỳ thuật toán nào!*
 
 ## 📚 Quá Trình Học Tập (`QuaTrinhHocTap/`)
