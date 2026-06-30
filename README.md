@@ -40,6 +40,7 @@ python main_app.py
 Hoặc bạn có thể mở folder trên Visual Studio Code, click vào file python main_app và run.
 ```
 *Giao diện Menu chính sẽ hiện ra cho phép bạn chọn và trải nghiệm bất kỳ thuật toán nào!*
+
 ## 📚 Quá Trình Học Tập (`QuaTrinhHocTap/`)
 Trong suốt khóa học, các bài tập thực hành trên lớp, bài tập về nhà (Jupyter Notebook, code nháp...) và các version cũ đã được gom gọn lại trong thư mục **`QuaTrinhHocTap/`**. 
 Thư mục này mang tính chất lưu giữ lại hành trình học tập, tìm tòi và phát triển mã nguồn từ những bài thực hành nhỏ nhất cho đến khi hoàn thiện thành một hệ thống đồ án UI hoàn chỉnh như hiện tại.
